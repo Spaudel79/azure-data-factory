@@ -1,0 +1,79 @@
+{
+	"name": "end_to_end_df",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "blob_e2eproject_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sink_gen2_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          age as integer,",
+				"          job as string,",
+				"          marital as string,",
+				"          education as string,",
+				"          default as string,",
+				"          balance as integer,",
+				"          housing as string,",
+				"          loan as string,",
+				"          contact as string,",
+				"          day as integer,",
+				"          month as string,",
+				"          duration as integer,",
+				"          campaign as integer,",
+				"          pdays as integer,",
+				"          previous as integer,",
+				"          poutcome as string,",
+				"          deposit as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 aggregate(groupBy(age,",
+				"          marital,",
+				"          education,",
+				"          default,",
+				"          balance,",
+				"          housing,",
+				"          loan,",
+				"          contact,",
+				"          day,",
+				"          month,",
+				"          duration,",
+				"          campaign,",
+				"          pdays,",
+				"          previous,",
+				"          poutcome,",
+				"          deposit),",
+				"     job = count()) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
